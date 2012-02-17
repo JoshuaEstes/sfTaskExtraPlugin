@@ -8,11 +8,7 @@ require_once dirname(__FILE__).'/../sfTaskExtraBaseTask.class.php';
  * @package     sfTaskExtraPlugin
  * @subpackage  task
  * @author      Kris Wallsmith <kris.wallsmith@symfony-project.com>
-<<<<<<< HEAD
  * @version     SVN: $Id: sfTaskExtraSubversionBaseTask.class.php 24538 2009-11-30 06:25:42Z dwhittle $
-=======
- * @version     SVN: $Id: sfTaskExtraSubversionBaseTask.class.php 26597 2010-01-13 23:33:05Z Kris.Wallsmith $
->>>>>>> ba8708782531e237c25c55f198c7eacc5feee572
  */
 abstract class sfTaskExtraSubversionBaseTask extends sfTaskExtraBaseTask
 {
@@ -21,12 +17,7 @@ abstract class sfTaskExtraSubversionBaseTask extends sfTaskExtraBaseTask
 
   protected function getStatus($path)
   {
-<<<<<<< HEAD
     $xml = simplexml_load_string($this->getFilesystem()->execute(sprintf('%s status --xml %s', $this->subversionBinary, escapeshellarg($path))));
-=======
-    list($out, $err) = $this->getFilesystem()->execute(sprintf('%s status --xml %s', $this->subversionBinary, escapeshellarg($path)));
-    $xml = new SimpleXMLElement($out);
->>>>>>> ba8708782531e237c25c55f198c7eacc5feee572
     return (string) $xml->target->entry->{'wc-status'}['item'];
   }
 
@@ -52,12 +43,7 @@ abstract class sfTaskExtraSubversionBaseTask extends sfTaskExtraBaseTask
 
       foreach (glob($path.'/'.$value) as $entry)
       {
-<<<<<<< HEAD
         if (!in_array($this->getStatus($entry), array('unversioned', 'ignored')))
-=======
-        $status = $this->getStatus($entry);
-        if ($status && !in_array($status, array('unversioned', 'ignored')))
->>>>>>> ba8708782531e237c25c55f198c7eacc5feee572
         {
           $this->getFilesystem()->execute(sprintf('%s rm --force %s', $this->subversionBinary, $entry));
         }
@@ -89,15 +75,9 @@ abstract class sfTaskExtraSubversionBaseTask extends sfTaskExtraBaseTask
       $path = array($path);
     }
 
-<<<<<<< HEAD
     $file = sys_get_temp_dir().'sf_'.md5(rand(11111, 99999));
     $this->getFilesystem()->touch($file);
     file_put_contents($file, join(PHP_EOL, $value));
-=======
-    $file = tempnam(sys_get_temp_dir(), 'sf_');
-    $this->logSection('file+', $file);
-    file_put_contents($file, implode(PHP_EOL, $value));
->>>>>>> ba8708782531e237c25c55f198c7eacc5feee572
 
     foreach ($path as $p)
     {
