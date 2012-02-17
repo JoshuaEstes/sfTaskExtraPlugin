@@ -8,7 +8,11 @@ require_once dirname(__FILE__).'/sfTaskExtraPluginBaseTask.class.php';
  * @package     sfTaskExtraPlugin
  * @subpackage  task
  * @author      Kris Wallsmith <kris.wallsmith@symfony-project.com>
+<<<<<<< HEAD
  * @version     SVN: $Id: sfPluginPackageTask.class.php 25195 2009-12-10 15:22:14Z Jonathan.Wage $
+=======
+ * @version     SVN: $Id: sfPluginPackageTask.class.php 26200 2010-01-04 23:50:59Z Kris.Wallsmith $
+>>>>>>> ba8708782531e237c25c55f198c7eacc5feee572
  */
 class sfPluginPackageTask extends sfTaskExtraPluginBaseTask
 {
@@ -30,6 +34,11 @@ class sfPluginPackageTask extends sfTaskExtraPluginBaseTask
       new sfCommandOption('plugin-stability', null, sfCommandOption::PARAMETER_REQUIRED, 'The plugin stability'),
       new sfCommandOption('non-interactive', null, sfCommandOption::PARAMETER_NONE, 'Skip interactive prompts'),
       new sfCommandOption('nocompress', null, sfCommandOption::PARAMETER_NONE, 'Do not compress the package'),
+<<<<<<< HEAD
+=======
+      new sfCommandOption('application', null, sfCommandOption::PARAMETER_OPTIONAL, 'The application name', true),
+      new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
+>>>>>>> ba8708782531e237c25c55f198c7eacc5feee572
     ));
 
     $this->namespace = 'plugin';
@@ -167,17 +176,29 @@ EOF;
     $tokens = array(
       'PLUGIN_NAME'  => $arguments['plugin'],
       'CURRENT_DATE' => date('Y-m-d'),
+<<<<<<< HEAD
+=======
+      'ENCODING'     => sfConfig::get('sf_charset'),
+>>>>>>> ba8708782531e237c25c55f198c7eacc5feee572
     );
 
     if (false !== strpos($template, '##SUMMARY##'))
     {
       $tokens['SUMMARY'] = $this->askAndValidate('Summarize your plugin in one line:', new sfValidatorCallback(array(
         'required' => true,
+<<<<<<< HEAD
         'callback' => create_function('$a, $b', 'return htmlentities($b);'),
       ), array(
         'required' => 'You must provide a summary of your plugin.',
       )), array(
         'value'    => isset($properties['symfony']['author']) ? htmlentities($properties['symfony']['author']) : null,
+=======
+        'callback' => create_function('$a, $b', 'return htmlspecialchars($b, ENT_QUOTES, sfConfig::get(\'sf_charset\'));'),
+      ), array(
+        'required' => 'You must provide a summary of your plugin.',
+      )), array(
+        'value'    => isset($properties['symfony']['author']) ? htmlspecialchars($properties['symfony']['author'], ENT_QUOTES, sfConfig::get('sf_charset')) : null,
+>>>>>>> ba8708782531e237c25c55f198c7eacc5feee572
       ));
     }
 
@@ -185,7 +206,11 @@ EOF;
     {
       $validator = new sfValidatorString(array(), array('required' => 'A lead developer name is required.'));
       $tokens['LEAD_NAME'] = $this->askAndValidate('Lead developer name:', $validator, array(
+<<<<<<< HEAD
         'value' => isset($properties['symfony']['author']) ? htmlentities($properties['symfony']['author']) : null,
+=======
+        'value' => isset($properties['symfony']['author']) ? htmlspecialchars($properties['symfony']['author'], ENT_QUOTES, sfConfig::get('sf_charset')) : null,
+>>>>>>> ba8708782531e237c25c55f198c7eacc5feee572
       ));
     }
 
@@ -193,7 +218,11 @@ EOF;
     {
       $validator = new sfValidatorEmail(array(), array('required' => 'A valid lead developer email address is required.', 'invalid' => '"%value%" is not a valid email address.'));
       $tokens['LEAD_EMAIL'] = $this->askAndValidate('Lead developer email:', $validator, array(
+<<<<<<< HEAD
         'value' => isset($properties['symfony']['email']) ? htmlentities($properties['symfony']['email']) : null,
+=======
+        'value' => isset($properties['symfony']['email']) ? htmlspecialchars($properties['symfony']['email'], ENT_QUOTES, sfConfig::get('sf_charset')) : null,
+>>>>>>> ba8708782531e237c25c55f198c7eacc5feee572
       ));
     }
 
@@ -201,7 +230,11 @@ EOF;
     {
       $validator = new sfValidatorString(array(), array('required' => 'A lead developer username is required.'));
       $tokens['LEAD_USERNAME'] = $this->askAndValidate('Lead developer username:', $validator, array(
+<<<<<<< HEAD
         'value' => isset($properties['symfony']['username']) ? htmlentities($properties['symfony']['username']) : null,
+=======
+        'value' => isset($properties['symfony']['username']) ? htmlspecialchars($properties['symfony']['username'], ENT_QUOTES, sfConfig::get('sf_charset')) : null,
+>>>>>>> ba8708782531e237c25c55f198c7eacc5feee572
       ));
     }
 
@@ -228,6 +261,10 @@ EOF;
 
     // remove those tokens that shouldn't be written to the template
     unset(
+<<<<<<< HEAD
+=======
+      $tokens['ENCODING'],
+>>>>>>> ba8708782531e237c25c55f198c7eacc5feee572
       $tokens['CURRENT_DATE'],
       $tokens['PLUGIN_VERSION'],
       $tokens['API_VERSION'],
@@ -254,18 +291,29 @@ EOF;
    */
   protected function buildContents($directory, sfFinder $finder = null, SimpleXMLElement $baseXml = null)
   {
+<<<<<<< HEAD
     if (is_null($finder))
+=======
+    if (null === $finder)
+>>>>>>> ba8708782531e237c25c55f198c7eacc5feee572
     {
       $finder = sfFinder::type('any')->maxdepth(0);
     }
 
+<<<<<<< HEAD
     if (is_null($baseXml))
     {
       $baseXml = simplexml_load_string('<dir name="/"/>');
+=======
+    if (null === $baseXml)
+    {
+      $baseXml = new SimpleXMLElement('<dir name="/"/>');
+>>>>>>> ba8708782531e237c25c55f198c7eacc5feee572
     }
 
     foreach ($finder->in($directory) as $entry)
     {
+<<<<<<< HEAD
       $name = basename($entry);
       if ($name == 'package.xml')
       {
@@ -275,6 +323,12 @@ EOF;
       {
         $entryXml = $baseXml->addChild('dir');
         $entryXml['name'] = $name;
+=======
+      if (is_dir($entry))
+      {
+        $entryXml = $baseXml->addChild('dir');
+        $entryXml['name'] = basename($entry);
+>>>>>>> ba8708782531e237c25c55f198c7eacc5feee572
 
         $this->buildContents($entry, null, $entryXml);
       }
@@ -286,22 +340,38 @@ EOF;
       }
     }
 
+<<<<<<< HEAD
     $xml = $baseXml->asXml();
 
     // remove the xml declaration
     list(, $xml) = preg_split('/[\r\n]+/', $xml, 2);
+=======
+    // format using DOM to omit XML declaration
+    $domElement = dom_import_simplexml($baseXml);
+    $domDocument = $domElement->ownerDocument;
+    $domDocument->encoding = sfConfig::get('sf_charset');
+    $xml = $domDocument->saveXml($domElement);
+>>>>>>> ba8708782531e237c25c55f198c7eacc5feee572
 
     return $xml;
   }
 
   /**
+<<<<<<< HEAD
    * @see sfTaskExtraBaseTask
+=======
+   * @see sfTask
+>>>>>>> ba8708782531e237c25c55f198c7eacc5feee572
    */
   public function askAndValidate($question, sfValidatorBase $validator, array $options = array())
   {
     if ($this->interactive)
     {
+<<<<<<< HEAD
       return sfTaskExtraBaseTask::doAskAndValidate($this, $question, $validator, $options);
+=======
+      return parent::askAndValidate($question, $validator, $options);
+>>>>>>> ba8708782531e237c25c55f198c7eacc5feee572
     }
     else
     {

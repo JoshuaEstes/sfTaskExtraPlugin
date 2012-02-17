@@ -6,11 +6,26 @@
  * @package     sfTaskExtraPlugin
  * @subpackage  task
  * @author      Kris Wallsmith <kris.wallsmith@symfony-project.com>
+<<<<<<< HEAD
  * @version     SVN: $Id: sfTaskExtraBaseTask.class.php 17285 2009-04-14 04:41:44Z Jonathan.Wage $
+=======
+ * @version     SVN: $Id: sfTaskExtraBaseTask.class.php 25037 2009-12-07 19:45:39Z Kris.Wallsmith $
+>>>>>>> ba8708782531e237c25c55f198c7eacc5feee572
  */
 abstract class sfTaskExtraBaseTask extends sfBaseTask
 {
   /**
+<<<<<<< HEAD
+=======
+   * @see doCheckPluginExists()
+   */
+  public function checkPluginExists($plugin, $boolean = true)
+  {
+    self::doCheckPluginExists($this, $plugin, $boolean);
+  }
+
+  /**
+>>>>>>> ba8708782531e237c25c55f198c7eacc5feee572
    * Checks if a plugin exists.
    * 
    * The plugin directory must exist and have at least one file or folder
@@ -21,6 +36,7 @@ abstract class sfTaskExtraBaseTask extends sfBaseTask
    * 
    * @throws  sfException If the plugin does not exist
    */
+<<<<<<< HEAD
   static public function checkPluginExists($plugin, $boolean = true)
   {
     try {
@@ -84,5 +100,25 @@ abstract class sfTaskExtraBaseTask extends sfBaseTask
     }
 
     throw $error;
+=======
+  static public function doCheckPluginExists($task, $plugin, $boolean = true)
+  {
+    if (in_array($plugin, $task->configuration->getPlugins()))
+    {
+      // plugin exists if a plugin configuration exists
+      $exists = true;
+    }
+    else
+    {
+      // otherwise check the plugins directory
+      $root = sfConfig::get('sf_plugins_dir').'/'.$plugin;
+      $exists = is_dir($root) && count(sfFinder::type('any')->in($root)) > 0;
+    }
+
+    if ($boolean != $exists)
+    {
+      throw new sfException(sprintf($boolean ? 'Plugin "%s" does not exist' : 'Plugin "%s" exists', $plugin));
+    }
+>>>>>>> ba8708782531e237c25c55f198c7eacc5feee572
   }
 }
